@@ -1,0 +1,46 @@
+{
+  "name": "ES6-boilerplate",
+  "version": "1.0.0",
+  "description": "es6-boilerplate for FE development",
+  "main": "index.js",
+  "repository": {
+    "url": "git@github.com:Razum/ES6-boilerplate.git",
+    "type": "git"
+  },
+  "author": "Razum <razumyeyenko@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "prestart": "npm install",
+    "build": "npm run prestart && gulp",
+    "start": "gulp --dev"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.5.3",
+    "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.2.8",
+    "babel-preset-latest": "^6.16.0",
+    "browser-sync": "^2.18.1",
+    "cssnano": "^3.8.0",
+    "del": "^2.2.2",
+    "eslint-plugin-import": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-if": "^2.0.2",
+    "gulp-notify": "^2.2.0",
+    "gulp-nunjucks-render": "^2.0.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-postcss": "^6.2.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-webpack": "^1.5.0",
+    "json-loader": "^0.5.4",
+    "run-sequence": "^1.2.2",
+    "webpack": "^1.13.3"
+  }
+}
