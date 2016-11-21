@@ -2,16 +2,20 @@
 
 ## Technologies
 #### Build
-    - Gulp
-    - Webpack
+- [Gulp](http://gulpjs.com/)
+- [Webpack](https://webpack.github.io/)
+- [yarn](https://yarnpkg.com/)
+
 #### Templates:
-    - Nunjucks - https://mozilla.github.io/nunjucks/
+- [Nunjucks](https://mozilla.github.io/nunjucks/)
+
 #### Styles:
-    - SCSS
-    - PostCSS (autoprefixer / cssnano)
+- SCSS
+- PostCSS (autoprefixer / cssnano)
+
 #### Javascript
-    - ES6 (Babel)
-    - ESLint
+- [ES6 (Babel)](https://babeljs.io/)
+- [ESLint](http://eslint.org/)
     
 
 
