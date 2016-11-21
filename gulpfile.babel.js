@@ -3,10 +3,10 @@ import del from 'del';
 import gulpif from 'gulp-if';
 import gutil from 'gulp-util';
 import plumber from 'gulp-plumber';
-import notify from 'gulp-notify';
 import notifier from 'node-notifier';
 import runSequence from 'run-sequence';
-import { create as bsCreate, reload } from 'browser-sync';
+import { create as bsCreate } from 'browser-sync';
+import changed from 'gulp-changed';
 
 // styles
 import sass from 'gulp-sass';
@@ -24,6 +24,9 @@ import eslint from 'gulp-eslint';
 // templates
 import nunjucksRender from 'gulp-nunjucks-render';
 
+// images
+import imagemin from 'gulp-imagemin';
+
 
 const config = {
     dest: 'dist/',
@@ -35,23 +38,29 @@ const config = {
     },
     scripts: {
         src: './src/assets/scripts/main.js',
-        dest: './dist/',
+        dest: './dist/assets/scripts/',
         watch: './src/assets/scripts/**/*'
     },
     styles: {
         src: './src/assets/styles/main.scss',
-        dest: './dist/',
+        dest: './dist/assets/styles/',
         browsers: ['last 1 version'],
         watch: './src/assets/styles/**/*'
+    },
+    images: {
+        src: 'src/assets/images/**/*',
+        dest: 'dist/assets/images',
+        watch: 'src/assets/images/**/*'
     },
     dev: gutil.env.dev
 };
 
 const reportError = function (error) {
-    notify.onError({
+    notifier.notify({
         title: `Task Failed [${error.plugin}]`,
-        message: `${error.line ? `Line ${error.line}` : ''} ${ error.message }`
-    })(error);
+        message: `${error.line ? `Line ${error.line}` : ''} ${ error.message }`,
+        sound: 'Sosumi'
+    });
 
     const chalk = gutil.colors.white.bgRed;
     let report = `
@@ -75,16 +84,17 @@ gulp.task('clean', () => {
 // templates
 gulp.task('templates', () => {
     return gulp.src(config.templates.src)
+        .pipe(changed(config.templates.dest))
         .pipe(plumber({errorHandler: reportError}))
         .pipe(nunjucksRender({path: [config.templates.basePath]}))
         .pipe(gulp.dest(config.templates.dest))
-        .pipe(notify({title: 'Templates task complete!', sound: 'Pop'}));
 });
 
 // scripts
 const webpackConfig = webpackConfigWrapper(config);
 gulp.task('scripts', ['lint'], () => {
     return gulp.src(config.scripts.src)
+        .pipe(changed(config.scripts.dest))
         .pipe(gulpWebpack(webpackConfig, webpack, function (error, stats) {
             if (stats.compilation.errors.length) {
                 const err = stats.compilation.errors[0].error;
@@ -97,7 +107,6 @@ gulp.task('scripts', ['lint'], () => {
             }
         }))
         .pipe(gulp.dest(config.scripts.dest))
-        .pipe(notify({title: 'Scripts task complete!', sound: 'Pop'}));
 });
 
 
@@ -108,14 +117,14 @@ gulp.task('styles', () => {
         cssnano()
     ];
     return gulp.src(config.styles.src)
+        .pipe(changed(config.styles.dest))
         .pipe(plumber({errorHandler: reportError}))
         .pipe(gulpif(config.dev, sourcemaps.init()))
         .pipe(sass())
         .pipe(postcss(processors))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(config.styles.dest))
-        .pipe(gulpif(config.dev, reload({ stream: true })))
-        .pipe(notify({title: 'Styles task complete!', sound: 'Pop'}));
+        .pipe(gulpif(config.dev, browserSync.reload({ stream: true })))
 });
 
 
@@ -137,6 +146,17 @@ gulp.task('lint', () => {
         .pipe(eslint.failAfterError())
 });
 
+// images
+gulp.task('images', () => {
+    return gulp.src(config.images.src)
+        .pipe(changed(config.images.dest))
+        .pipe(imagemin({
+            progressive: true,
+            interlaced: true
+        }))
+        .pipe(gulp.dest(config.images.dest));
+});
+
 const browserSync = bsCreate();
 gulp.task('serve', () => {
 
@@ -144,16 +164,18 @@ gulp.task('serve', () => {
     browserSync.init({
         server: {
             baseDir: config.templates.dest
-        }
+        },
+        notify: false,
+        logPrefix: 'BrowserSync'
     });
 
-    gulp.task('templates:watch', ['templates'], reload);
+    gulp.task('templates:watch', ['templates'], browserSync.reload);
     gulp.watch(config.templates.watch, ['templates:watch']);
 
     gulp.task('styles:watch', ['styles']);
     gulp.watch(config.styles.watch, ['styles:watch']);
 
-    gulp.task('scripts:watch', ['scripts'], reload);
+    gulp.task('scripts:watch', ['scripts'], browserSync.reload);
     gulp.watch(config.scripts.watch, ['scripts:watch']);
 });
 
@@ -162,13 +184,19 @@ gulp.task('default', ['clean'], () => {
     const tasks = [
         'templates',
         'scripts',
-        'styles'
+        'styles',
+        'images'
     ];
 
     // run build
     runSequence(tasks, () => {
         if (config.dev) {
             gulp.start('serve');
+            notifier.notify({
+                title: `Build Complete!`,
+                message: " ",
+                sound: 'Sosumi'
+            });
         }
     });
 });
