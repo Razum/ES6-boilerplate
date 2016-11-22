@@ -10,7 +10,7 @@
   "author": "Razum <razumyeyenko@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prestart": "npm install",
+    "prestart": "yarn install",
     "build": "npm run prestart && gulp",
     "start": "gulp --dev"
   },
