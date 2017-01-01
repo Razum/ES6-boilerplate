@@ -20,13 +20,13 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^6.5.3",
+    "autoprefixer": "^6.6.0",
     "babel-core": "^6.18.2",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.8",
     "babel-preset-latest": "^6.16.0",
-    "browser-sync": "^2.18.1",
-    "cssnano": "^3.8.1",
+    "browser-sync": "^2.18.5",
+    "cssnano": "^3.9.1",
     "del": "^2.2.2",
     "eslint-plugin-import": "^2.2.0",
     "gulp": "^3.9.1",
@@ -37,12 +37,12 @@
     "gulp-nunjucks-render": "^2.0.0",
     "gulp-plumber": "^1.1.0",
     "gulp-postcss": "^6.2.0",
-    "gulp-sass": "^2.3.2",
+    "gulp-sass": "^3.0.0",
     "gulp-sourcemaps": "^2.2.1",
     "gulp-webpack": "^1.5.0",
     "json-loader": "^0.5.4",
     "node-notifier": "^4.6.1",
     "run-sequence": "^1.2.2",
-    "webpack": "^1.13.3"
+    "webpack": "^1.14.0"
   }
 }
