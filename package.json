@@ -23,7 +23,7 @@
     "autoprefixer": "^6.6.0",
     "babel-core": "^6.18.2",
     "babel-eslint": "^7.1.1",
-    "babel-loader": "^6.2.8",
+    "babel-loader": "^6.2.10",
     "babel-preset-latest": "^6.16.0",
     "browser-sync": "^2.18.5",
     "cssnano": "^3.9.1",
