@@ -32,9 +32,9 @@ const config = {
     dest: 'dist/',
     templates: {
         src: ['src/templates/**/*.html', '!src/templates/+(layouts|components)/**'],
-        dest: './dist',
-        watch: './src/templates/**/*',
-        basePath: './src/templates/'
+        dest: 'dist',
+        watch: 'src/templates/**/*.html',
+        basePath: 'src/templates/'
     },
     scripts: {
         src: './src/assets/scripts/main.js',
@@ -84,7 +84,6 @@ gulp.task('clean', () => {
 // templates
 gulp.task('templates', () => {
     return gulp.src(config.templates.src)
-        .pipe(changed(config.templates.dest))
         .pipe(plumber({errorHandler: reportError}))
         .pipe(nunjucksRender({path: [config.templates.basePath]}))
         .pipe(gulp.dest(config.templates.dest))
