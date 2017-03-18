@@ -6,7 +6,6 @@ import plumber from 'gulp-plumber';
 import notifier from 'node-notifier';
 import runSequence from 'run-sequence';
 import { create as bsCreate } from 'browser-sync';
-import changed from 'gulp-changed';
 
 // styles
 import sass from 'gulp-sass';
@@ -86,14 +85,13 @@ gulp.task('templates', () => {
     return gulp.src(config.templates.src)
         .pipe(plumber({errorHandler: reportError}))
         .pipe(nunjucksRender({path: [config.templates.basePath]}))
-        .pipe(gulp.dest(config.templates.dest))
+        .pipe(gulp.dest(config.templates.dest));
 });
 
 // scripts
 const webpackConfig = webpackConfigWrapper(config);
 gulp.task('scripts', ['lint'], () => {
     return gulp.src(config.scripts.src)
-        .pipe(changed(config.scripts.dest))
         .pipe(gulpWebpack(webpackConfig, webpack, function (error, stats) {
             if (stats.compilation.errors.length) {
                 const err = stats.compilation.errors[0].error;
@@ -116,7 +114,6 @@ gulp.task('styles', () => {
         cssnano()
     ];
     return gulp.src(config.styles.src)
-        .pipe(changed(config.styles.dest))
         .pipe(plumber({errorHandler: reportError}))
         .pipe(gulpif(config.dev, sourcemaps.init()))
         .pipe(sass())
@@ -148,7 +145,6 @@ gulp.task('lint', () => {
 // images
 gulp.task('images', () => {
     return gulp.src(config.images.src)
-        .pipe(changed(config.images.dest))
         .pipe(imagemin({
             progressive: true,
             interlaced: true
@@ -157,6 +153,10 @@ gulp.task('images', () => {
 });
 
 const browserSync = bsCreate();
+const reload = (done) => {
+    browserSync.reload();
+    done();
+};
 gulp.task('serve', () => {
 
     // Serve files from the root of this project
@@ -168,13 +168,13 @@ gulp.task('serve', () => {
         logPrefix: 'BrowserSync'
     });
 
-    gulp.task('templates:watch', ['templates'], browserSync.reload);
+    gulp.task('templates:watch', ['templates'], reload);
     gulp.watch(config.templates.watch, ['templates:watch']);
 
     gulp.task('styles:watch', ['styles']);
     gulp.watch(config.styles.watch, ['styles:watch']);
 
-    gulp.task('scripts:watch', ['scripts'], browserSync.reload);
+    gulp.task('scripts:watch', ['scripts'], reload);
     gulp.watch(config.scripts.watch, ['scripts:watch']);
 });
 
