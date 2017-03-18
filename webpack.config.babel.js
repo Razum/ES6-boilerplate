@@ -25,11 +25,7 @@ const getLoaders = (isDev) => {
             test: /\.jsx?$/,
             loader: 'babel-loader',
             exclude: /(node_modules|bower_components)/,
-        },
-        {
-            include: /\.json$/,
-            loaders: ["json-loader"]
-        },
+        }
     ];
 };
 
@@ -41,11 +37,11 @@ export default (config) => {
             filename: '[name].js'
         },
         resolve: {
-            extensions: ['', '.js', '.jsx', '.json']
+            extensions: ['.js', '.jsx', '.json']
         },
         devtool: "#inline-source-map",
         module: {
-            loaders: getLoaders(config.dev)
+            rules: getLoaders(config.dev)
         },
         plugins: getPlugins(config.dev),
     };

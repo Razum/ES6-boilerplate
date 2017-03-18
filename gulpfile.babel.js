@@ -15,9 +15,9 @@ import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 
 // scripts
-import gulpWebpack from 'gulp-webpack';
-import webpack from 'webpack';
 import webpackConfigWrapper from './webpack.config.babel'
+import webpack from 'webpack';
+import gulpWebpack from 'webpack-stream'
 import eslint from 'gulp-eslint';
 
 // templates
@@ -92,17 +92,8 @@ gulp.task('templates', () => {
 const webpackConfig = webpackConfigWrapper(config);
 gulp.task('scripts', ['lint'], () => {
     return gulp.src(config.scripts.src)
-        .pipe(gulpWebpack(webpackConfig, webpack, function (error, stats) {
-            if (stats.compilation.errors.length) {
-                const err = stats.compilation.errors[0].error;
-                reportError.call(gulp, {
-                    plugin: 'Webpack',
-                    line: err.error.loc.line,
-                    column: err.error.loc.column,
-                    message: err.message
-                });
-            }
-        }))
+        .pipe(plumber())
+        .pipe(gulpWebpack(webpackConfig, webpack))
         .pipe(gulp.dest(config.scripts.dest))
 });
 
