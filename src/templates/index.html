@@ -6,8 +6,13 @@
     <link href="assets/styles/main.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-
-<h1>This is index page!!!</h1>
+{% include "misc/svg-sprite.html" %}
+{% import "misc/icon.html" as icon %}
+<h1>This is index page!</h1>
+{{icon.get('facebook')}}
+{{icon.get('google')}}
+{{icon.get('linkedin')}}
+{{icon.get('twitter')}}
 
 <script src="assets/scripts/main.js"></script>
 </body>

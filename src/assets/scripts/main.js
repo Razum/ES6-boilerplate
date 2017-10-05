@@ -6,3 +6,5 @@ console.log(mySet);
 const [a, b] = [4, 6];
 
 console.log(a, b);
+
+console.log("".trim)

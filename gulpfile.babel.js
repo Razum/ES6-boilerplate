@@ -1,3 +1,4 @@
+'use strict';
 import gulp from 'gulp';
 import del from 'del';
 import gulpif from 'gulp-if';
@@ -6,6 +7,9 @@ import plumber from 'gulp-plumber';
 import notifier from 'node-notifier';
 import runSequence from 'run-sequence';
 import { create as bsCreate } from 'browser-sync';
+import inject from 'gulp-inject';
+import rename from 'gulp-rename';
+
 
 // styles
 import sass from 'gulp-sass';
@@ -26,11 +30,15 @@ import nunjucksRender from 'gulp-nunjucks-render';
 // images
 import imagemin from 'gulp-imagemin';
 
+// svg
+import svgstore from 'gulp-svgstore';
+import svgmin from 'gulp-svgmin';
+
 
 const config = {
     dest: 'dist/',
     templates: {
-        src: ['src/templates/**/*.html', '!src/templates/+(layouts|components)/**'],
+        src: ['src/templates/**/*.html', '!src/templates/+(layouts|components|misc)/**'],
         dest: 'dist',
         watch: 'src/templates/**/*.html',
         basePath: 'src/templates/'
@@ -50,6 +58,11 @@ const config = {
         src: 'src/assets/images/**/*',
         dest: 'dist/assets/images',
         watch: 'src/assets/images/**/*'
+    },
+    svg: {
+        src: 'src/assets/svg/**/*.svg',
+        placeholder: 'src/templates/misc/svg-placeholder.html',
+        spriteDest: 'src/templates/misc/'
     },
     dev: gutil.env.dev
 };
@@ -143,6 +156,23 @@ gulp.task('images', () => {
         .pipe(gulp.dest(config.images.dest));
 });
 
+// svg
+gulp.task('svg', () => {
+  const svgs = gulp.src(config.svg.src)
+    .pipe(svgmin())
+    .pipe(rename({prefix: 'icon-'}))
+    .pipe(svgstore({ inlineSvg: true }));
+
+  const fileContents = (filePath, file) => file.contents.toString();
+
+  return gulp
+    .src(config.svg.placeholder)
+    .pipe(inject(svgs, { transform: fileContents }))
+    .pipe(rename('svg-sprite.html'))
+    .pipe(gulp.dest(config.svg.spriteDest))
+
+});
+
 const browserSync = bsCreate();
 const reload = (done) => {
     browserSync.reload();
@@ -172,6 +202,7 @@ gulp.task('serve', () => {
 gulp.task('default', ['clean'], () => {
     // define build tasks
     const tasks = [
+        'svg',
         'templates',
         'scripts',
         'styles',

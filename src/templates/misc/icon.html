@@ -1,0 +1,6 @@
+{% macro get(name) %}
+<svg aria-hidden="true" class="icon" role="img">
+    <title>{{ name }}</title>
+    <use xlink:href="#icon-{{ name }}" />
+</svg>
+{% endmacro %}
