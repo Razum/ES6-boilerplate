@@ -202,7 +202,6 @@ gulp.task('serve', () => {
 gulp.task('default', ['clean'], () => {
     // define build tasks
     const tasks = [
-        'svg',
         'templates',
         'scripts',
         'styles',
@@ -210,7 +209,7 @@ gulp.task('default', ['clean'], () => {
     ];
 
     // run build
-    runSequence(tasks, () => {
+    runSequence('svg', tasks, () => {
         if (config.dev) {
             gulp.start('serve');
             notifier.notify({
