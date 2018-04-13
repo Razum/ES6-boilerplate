@@ -16,15 +16,25 @@
   },
   "babel": {
     "presets": [
-      "latest"
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 versions",
+              "safari >= 7"
+            ]
+          }
+        }
+      ]
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^7.2.0",
+    "autoprefixer": "^7.2.6",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.3",
     "babel-loader": "^7.1.2",
-    "babel-preset-latest": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.18.13",
     "cssnano": "^3.10.0",
     "del": "^3.0.0",
@@ -41,7 +51,7 @@
     "gulp-plumber": "^1.1.0",
     "gulp-postcss": "^7.0.0",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
+    "gulp-sass": "^3.2.1",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-svgmin": "^1.2.4",
     "gulp-svgstore": "^6.1.0",
